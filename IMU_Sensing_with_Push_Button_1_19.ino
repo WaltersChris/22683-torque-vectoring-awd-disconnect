@@ -17,9 +17,14 @@ float pitchOffset = 0;   // Offset to calibrate the flat ground position
 
 unsigned long prevTime = 0; // Previous time for delta time calculation
 
-// Fine-tuning constant to adjust small bias (this can now be set to 0 for simplicity)
-const float fineTuneBias = 0.0;  // Remove the adjustment since we want 0 on flat ground
-const float correctionFactor = 0.93;  // Scaling factor to fix the 90-degree issue 
+// Fine-tuning constant to adjust small bias 
+const float fineTuneBias = 0.0;  
+const float correctionFactor = 0.93;  
+
+// Button Pin and State for Clutch Control
+const int buttonPin = 2; // Pin where your button is connected
+bool lastButtonState = LOW;  // Last state of the button (to detect changes)
+bool clutchEnabled = true;   // Flag to enable/disable clutch system logic
 
 void setup() {
   Serial.begin(115200);
@@ -40,10 +45,13 @@ void setup() {
   mpu.setAccelerometerRange(MPU6050_RANGE_2_G);
   mpu.setGyroRange(MPU6050_RANGE_250_DEG);
 
-  // Calibration step to determine pitch offset (only when sensor is level)
+  // Calibration step to determine pitch offset 
   calibratePitch();
 
   prevTime = micros(); 
+
+  // Initialize the button pin
+  pinMode(buttonPin, INPUT_PULLUP); 
 }
 
 void loop() {
@@ -52,7 +60,20 @@ void loop() {
   // Read Sensor Data
   mpu.getEvent(&accel, &gyro, &temp);
 
-  // Calculate delta time (dt) in seconds using micros() for higher precision
+  // Check button state to enable or disable the clutch system
+  bool currentButtonState = digitalRead(buttonPin);
+  if (currentButtonState == LOW && lastButtonState == HIGH) { // Button pressed (active low)
+    delay(50); // Debounce delay
+    clutchEnabled = !clutchEnabled;  // Toggle clutch enable/disable
+    if (clutchEnabled) {
+      Serial.println("Clutch system ENABLED.");
+    } else {
+      Serial.println("Clutch system DISABLED.");
+    }
+  }
+  lastButtonState = currentButtonState; // Update last button state
+
+  // Calculate delta time (dt) in seconds using micros() 
   unsigned long currentTime = micros();
   float dt = (currentTime - prevTime) / 1000000.0; // Convert microseconds to seconds
   prevTime = currentTime;
@@ -72,12 +93,18 @@ void loop() {
   // Apply the correction factor for tilt beyond 90 degrees
   calibratedPitch *= correctionFactor;
 
-  // Additional offset correction for the sensor is reading -0.4 degrees on flat ground
-  calibratedPitch += 0.4;  
+  // Apply an additional offset correction for the sensor is reading -0.4 degrees on flat ground
+  calibratedPitch += 0.4;  // Adjust this value to match your sensor's offset
 
   // Print filtered and calibrated pitch
   Serial.print("Filtered Pitch: ");
   Serial.println(calibratedPitch);
+
+  // Apply clutch control logic if clutchEnabled is true
+  if (clutchEnabled) {
+    // Add your clutch control logic here (e.g., stepper motor control)
+    // This section will only run when the clutch is enabled
+  }
 }
 
 // Kalman Filter Implementation
@@ -110,7 +137,7 @@ void kalmanFilter(float accelAngle, float gyroRate, float dt) {
   P[1][1] -= K[1] * P01_temp;
 }
 
-// Function to calibrate pitch offset (only when sensor is level)
+// Function to calibrate pitch offset 
 void calibratePitch() {
   sensors_event_t accel, temp;
 
@@ -125,7 +152,6 @@ void calibratePitch() {
     // If near level, set the pitch offset as the calibration value
     pitchOffset = accelPitch;
 
-    // If the sensor is reading near -0.4 degrees on flat ground, we can set pitchOffset to 0.4 to correct
     if (pitchOffset < 0) {
       pitchOffset = 0;  // Ensure we don't have a negative offset
     }
