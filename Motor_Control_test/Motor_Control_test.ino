@@ -1,9 +1,30 @@
 #include <AccelStepper.h>  // AccelStepper library to control the stepper motor
+#include <MultiStepper.h>
+
+// Stepper motor driver settings:
+// Micro Step setting (SW1~4): 200, 40000 pulses/rev
+// Rotation (SW5): CCW
+// Control Mode (SW6): Closed Loop
+// Pulse Mode (SW7): PUL/DIR
+// Pulse Filter Time (SW8): No
 
 // Define stepper motor control pins
-#define STEP_PIN 3   // Pin for step pulse (STEP+)
-#define DIR_PIN 2    // Pin for direction (DIR+)
-#define ENA_PIN 4    // Optional pin for enable (ENA+)
+#define STEP_PIN D2   // Pin for step pulse (STEP+)
+#define DIR_PIN D3    // Pin for direction (DIR+)
+#define ENA_PIN D4    // Optional pin for enable (ENA+)
+
+// Definitions for LEDs
+#define OverTemp_LED D5 // Red overtemperature LED
+#define TwoWheel_LED D6 // Yellow 2WD LED
+#define FourWheel_LED D7 // Green 4WD LED
+
+// Additional definitions
+#define MotorAlarm_PIN D8 // optional Motor Driver over voltage or over current monitoring
+
+// Selection definitions - Analog Pins
+#define SystemOn_PIN A0 // Selection for system on/off
+#define MuSelect_PIN A1 // Selection for Mu/Friction Coefficient
+#define SystemStateSelect_Pin A2 // Selection for 2WD, 4WD, or 4WD Lock
 
 // Define the stepper motor
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);  // Using a stepper driver 
@@ -19,8 +40,10 @@ TorqueInterval torqueIntervals[] = {
   {50, 60, 200},   // Torque between 50-60 Nm corresponds to 200 degrees
   {60, 70, 220},   // Torque between 60-70 Nm corresponds to 220 degrees
   {70, 80, 240},   // Torque between 70-80 Nm corresponds to 240 degrees
-  // Add more intervals as needed
-};
+  //{x0, x0, xx0},
+   //Add more intervals as needed
+}; 
+  // This might not be how we do things
 
 void setup() {
   Serial.begin(115200);
