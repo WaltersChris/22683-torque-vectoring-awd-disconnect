@@ -66,12 +66,16 @@ void setup() {
 void loop() {
 
     SystemState = analogRead(SystemStateSelect_Pin); // Read "SystemStateSelect_Pin" to determine 2WD or 4WD
-    if (SystemState == 0){
+    if (SystemState == 0){ // 2WD state
       // do nothing (2WD)
       // delay for polling input
     }
-    
-
+    else if (SystemState == 1){ // 4WD
+      
+    }
+    else if (SystemState == 2){ // 4WD Lock
+      
+    }
 
 
 
