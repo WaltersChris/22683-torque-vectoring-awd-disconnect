@@ -45,8 +45,7 @@ TorqueInterval torqueIntervals[] = {
 }; 
   // This might not be how we do things
 
-// 
-   //int SystemState = 0; //  Place to store 2WD or 4WD state. 0 = 2WD, 1 = 4WD, 2 = 4WD Lock
+  //int SystemState = 0; //  Place to store 2WD or 4WD state. 0 = 2WD, 1 = 4WD, 2 = 4WD Lock
   // Need way to convert analog value to this digital scheme
 
 void setup() {
@@ -71,15 +70,12 @@ void loop() {
       // delay for polling input
     }
     else if (SystemState == 1){ // 4WD
-      
+      // use the move to target degree routine below?
     }
     else if (SystemState == 2){ // 4WD Lock
-      
+      // use the move to target degree with deg = max
+
     }
-
-
-
-
 
   
 //  // Hardcoded torque value 
@@ -101,4 +97,9 @@ void loop() {
 //    }
 //  }
 //  return 0;  // Return 0 if torque doesn't fall in any defined range
+
+// Torque Calculation Function
+
+// Function for overtemp LED
+
 }
