@@ -114,12 +114,12 @@ void loop() {
   Serial.println(" degrees");
 
   // Calculate the average pitch value from both sensors
-  //float averagePitch = (calibratedPitch1 + calibratedPitch2) / 2.0;
+  float averagePitch = (calibratedPitch1 + calibratedPitch2) / 2.0;
 
   // Print the average pitch value of both sensors
-  // Serial.print("Average Pitch: ");
-  // Serial.print(averagePitch, 2);  // Print with 2 decimal places
-  // Serial.println(" degrees");
+  Serial.print("Average Pitch: ");
+  Serial.print(averagePitch, 2);  // Print with 2 decimal places
+  Serial.println(" degrees");
 }
 
 // Kalman Filter Implementation for both sensors
