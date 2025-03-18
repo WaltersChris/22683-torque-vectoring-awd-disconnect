@@ -9,18 +9,18 @@
 // Pulse Filter Time (SW8): No
 
 // Define stepper motor control pins
-#define STEP_PIN D2   // Pin for step pulse (STEP+)
-#define DIR_PIN D3    // Pin for direction (DIR+)
-#define ENA_PIN D4    // Optional pin for enable (ENA+)
+#define STEP_PIN 2   // Pin for step pulse (STEP+)
+#define DIR_PIN 3    // Pin for direction (DIR+)
+#define ENA_PIN 4    // Optional pin for enable (ENA+)
 
 // Definitions for LEDs
-#define OverTemp_LED D5 // Red overtemperature LED
-#define TwoWheel_LED D6 // Yellow 2WD LED
-#define FourWheel_LED D7 // Green 4WD LEDq
+#define OverTemp_LED 5 // Red overtemperature LED
+#define TwoWheel_LED 6 // Yellow 2WD LED
+#define FourWheel_LED 7 // Green 4WD LED
 
 // Additional definitions
-#define MotorAlarm_PIN D8 // optional Motor Driver over voltage or over current monitoring
-#define HallEffect_PIN D9 // Digital? readout for the hall effect sensor
+#define MotorAlarm_PIN 8 // optional Motor Driver over voltage or over current monitoring
+#define HallEffect_PIN 9 // Digital? readout for the hall effect sensor
 
 // Selection definitions - Analog Pins
 #define SystemOn_PIN A0 // Selection for system on/off
@@ -53,6 +53,9 @@ TorqueInterval torqueIntervals[] = {
   // Need way to convert analog value to this digital scheme
 
 void setup() {
+  stepper.setMaxSpeed(300);
+  stepper.setAcceleration(750);
+  stepper.moveTo(0); // 500 is  full rev at 1k pulse/rev
 
   Serial.begin(115200);
   while (!Serial) delay(10);
@@ -68,18 +71,34 @@ void setup() {
 
 void loop() {
 
-    SystemState = analogRead(SystemStateSelect_Pin); // Read "SystemStateSelect_Pin" to determine 2WD or 4WD
-    if (SystemState == 0){ // 2WD state
+// If at the end of travel go to the other end
+//    if (stepper.distanceToGo() == 0)
+//      stepper.moveTo(-stepper.currentPosition());
+//   stepper.runToNewPosition(10);
+//   stepper.run();
+//   stepper.runToNewPosition(10);
+    stepper.run();
+    stepper.moveTo(10);
+    stepper.run();
+    stepper.moveTo(250);
+        stepper.run();
+    stepper.moveTo(-250);
+        stepper.run();
+    stepper.moveTo(500);
+//   stepper.runToNewPosition(10);
+
+//    SystemState = analogRead(SystemStateSelect_Pin); // Read "SystemStateSelect_Pin" to determine 2WD or 4WD
+//    if (SystemState == 0){ // 2WD state
       // do nothing (2WD)
       // delay for polling input
-    }
-    else if (SystemState == 1){ // 4WD
+//    }
+//    else if (SystemState == 1){ // 4WD
       // use the move to target degree routine below?
-    }
-    else if (SystemState == 2){ // 4WD Lock
+//    }
+//    else if (SystemState == 2){ // 4WD Lock
       // use the move to target degree with deg = max
 
-    }
+//    }
 
   
 //  // Hardcoded torque value 

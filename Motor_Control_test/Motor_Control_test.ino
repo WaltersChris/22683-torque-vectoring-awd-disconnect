@@ -9,17 +9,17 @@
 // Pulse Filter Time (SW8): No
 
 // Define stepper motor control pins
-#define STEP_PIN D2   // Pin for step pulse (STEP+)
-#define DIR_PIN D3    // Pin for direction (DIR+)
-#define ENA_PIN D4    // Optional pin for enable (ENA+)
+#define STEP_PIN 2   // Pin for step pulse (STEP+)
+#define DIR_PIN 3    // Pin for direction (DIR+)
+#define ENA_PIN 4    // Optional pin for enable (ENA+)
 
 // Definitions for LEDs
-#define OverTemp_LED D5 // Red overtemperature LED
-#define TwoWheel_LED D6 // Yellow 2WD LED
-#define FourWheel_LED D7 // Green 4WD LED
+#define OverTemp_LED 5 // Red overtemperature LED
+#define TwoWheel_LED 6 // Yellow 2WD LED
+#define FourWheel_LED 7 // Green 4WD LED
 
 // Additional definitions
-#define MotorAlarm_PIN D8 // optional Motor Driver over voltage or over current monitoring
+#define MotorAlarm_PIN 8 // optional Motor Driver over voltage or over current monitoring
 
 // Selection definitions - Analog Pins
 #define SystemOn_PIN A0 // Selection for system on/off
