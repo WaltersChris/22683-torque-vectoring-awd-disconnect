@@ -38,7 +38,7 @@ struct TorqueInterval {
   float maxTorque;
   int degrees;
 };
-z
+
 TorqueInterval torqueIntervals[] = {
   {50, 60, 200},   // Torque between 50-60 Nm corresponds to 200 degrees
   {60, 70, 220},   // Torque between 60-70 Nm corresponds to 220 degrees
@@ -53,9 +53,9 @@ TorqueInterval torqueIntervals[] = {
   // Need way to convert analog value to this digital scheme
 
 void setup() {
-  stepper.setMaxSpeed(300);
+  stepper.setMaxSpeed(100);
   stepper.setAcceleration(750);
-  stepper.moveTo(0); // 500 is  full rev at 1k pulse/rev
+  stepper.moveTo(-50); // 500 is  full rev at 1k pulse/rev
 
   Serial.begin(115200);
   while (!Serial) delay(10);
@@ -71,20 +71,27 @@ void setup() {
 
 void loop() {
 
-// If at the end of travel go to the other end
+ //If at the end of travel go to the other end
 //    if (stepper.distanceToGo() == 0)
 //      stepper.moveTo(-stepper.currentPosition());
 //   stepper.runToNewPosition(10);
 //   stepper.run();
-//   stepper.runToNewPosition(10);
-    stepper.run();
-    stepper.moveTo(10);
-    stepper.run();
-    stepper.moveTo(250);
-        stepper.run();
-    stepper.moveTo(-250);
-        stepper.run();
-    stepper.moveTo(500); // ~~Test code~~
+    digitalWrite(DIR_PIN, LOW);
+    stepper.runToPosition();
+    Serial.print('x');
+//    delay(500);
+    digitalWrite(DIR_PIN, HIGH);
+    stepper.moveTo(100);
+    stepper.runToPosition();
+    Serial.print('a');
+//    delay(500);
+    digitalWrite(DIR_PIN, LOW);
+  
+    stepper.moveTo(500);
+    stepper.runToPosition();
+    Serial.print('c');
+//    delay(500);
+            // ~~Test code~~
 
 
 //    SystemState = analogRead(SystemStateSelect_Pin); // Read "SystemStateSelect_Pin" to determine 2WD or 4WD
