@@ -2,11 +2,11 @@
 #include <MultiStepper.h>
 
 // Stepper motor driver settings:
-// Micro Step setting (SW1~4): 200, 40000 pulses/rev
-// Rotation (SW5): CCW
+// Micro Step setting (SW1~4): 1000 pulses/rev
+// Rotation (SW5): CW
 // Control Mode (SW6): Closed Loop
 // Pulse Mode (SW7): PUL/DIR
-// Pulse Filter Time (SW8): No
+// Pulse Filter Time (SW8): Yes
 
 // Define stepper motor control pins
 #define STEP_PIN 2   // Pin for step pulse (STEP+)
@@ -38,7 +38,7 @@ struct TorqueInterval {
   float maxTorque;
   int degrees;
 };
-
+z
 TorqueInterval torqueIntervals[] = {
   {50, 60, 200},   // Torque between 50-60 Nm corresponds to 200 degrees
   {60, 70, 220},   // Torque between 60-70 Nm corresponds to 220 degrees
@@ -84,8 +84,8 @@ void loop() {
         stepper.run();
     stepper.moveTo(-250);
         stepper.run();
-    stepper.moveTo(500);
-//   stepper.runToNewPosition(10);
+    stepper.moveTo(500); // ~~Test code~~
+
 
 //    SystemState = analogRead(SystemStateSelect_Pin); // Read "SystemStateSelect_Pin" to determine 2WD or 4WD
 //    if (SystemState == 0){ // 2WD state
@@ -120,6 +120,9 @@ void loop() {
 //    }
 //  }
 //  return 0;  // Return 0 if torque doesn't fall in any defined range
+
+//// Degrees-to-Pulses Mapping Function
+
 
 // Torque Calculation Function
 
