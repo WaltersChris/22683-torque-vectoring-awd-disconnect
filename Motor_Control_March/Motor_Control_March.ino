@@ -1,5 +1,5 @@
 #include <AccelStepper.h>  // AccelStepper library to control the stepper motor
-#include <MultiStepper.h>
+//#include <MultiStepper.h>
 
 // Stepper motor driver settings:
 // Micro Step setting (SW1~4): 1000 pulses/rev
@@ -39,6 +39,9 @@ struct TorqueInterval {
   int degrees;
 };
 
+int Forward = 2;
+int Reverse = 2; // Test code, user inputs number of pulses to go forward and reverse with the motor
+
 TorqueInterval torqueIntervals[] = {
   {50, 60, 200},   // Torque between 50-60 Nm corresponds to 200 degrees
   {60, 70, 220},   // Torque between 60-70 Nm corresponds to 220 degrees
@@ -53,9 +56,9 @@ TorqueInterval torqueIntervals[] = {
   // Need way to convert analog value to this digital scheme
 
 void setup() {
-  stepper.setMaxSpeed(100);
+  stepper.setMaxSpeed(200);
   stepper.setAcceleration(750);
-  stepper.moveTo(-50); // 500 is  full rev at 1k pulse/rev
+  stepper.moveTo(0); // 500 is  full rev at 1k pulse/rev
 
   Serial.begin(115200);
   while (!Serial) delay(10);
@@ -76,21 +79,36 @@ void loop() {
 //      stepper.moveTo(-stepper.currentPosition());
 //   stepper.runToNewPosition(10);
 //   stepper.run();
-    digitalWrite(DIR_PIN, LOW);
-    stepper.runToPosition();
-    Serial.print('x');
+   // digitalWrite(DIR_PIN, LOW);
+//    stepper.runToPosition();
+//        delay(10);
+//    Serial.print('x');
 //    delay(500);
-    digitalWrite(DIR_PIN, HIGH);
-    stepper.moveTo(100);
+    //digitalWrite(DIR_PIN, HIGH);
+  while (Serial.available() > 0) {    
+    Serial.print('?');
+        delay(5);
+    Forward = Serial.parseInt();
+        delay(5);
+    Forward = 100*Forward;
+    stepper.moveTo(Forward);
+       delay(5);
     stepper.runToPosition();
-    Serial.print('a');
+    Serial.print('F');
+        delay(5);
 //    delay(500);
-    digitalWrite(DIR_PIN, LOW);
-  
-    stepper.moveTo(500);
+    Serial.print('?');
+        delay(5);
+    Reverse = Serial.parseInt();
+        delay(5);
+    Reverse = 100*Reverse;  
+    stepper.moveTo(-Reverse);
+//    digitalWrite(DIR_PIN, HIGH);
+
     stepper.runToPosition();
-    Serial.print('c');
-//    delay(500);
+    Serial.print('R');
+    delay(5);
+  }
             // ~~Test code~~
 
 
