@@ -129,6 +129,7 @@ void loop() {
     if (rpmFiltered <= 10)  { //If RPM is greater than 0 (or a low amount)
 //      stepper.stop(); // Stop motor when clutch is engaged
       clutch_Kiss = 1; // Set varible to clutch engaged
+      digitalWrite(OverTemp_LED, HIGH) // test code for no motor
     }
     else if (clutch_Kiss = 1) {
 //       stepper.setSpeed(-50);  
@@ -136,7 +137,8 @@ void loop() {
 
         if (rpmFiltered >= 10){ // Clutch no longer engaged          
 //       stepper.stop();
-          clutch_Calibrated = 1; // Set clibration varible
+          clutch_Calibrated = 1; // Set calibration varible
+          digitalWrite(TwoWheel_LED, HIGH) // test code for no motor
         }
     }
 
